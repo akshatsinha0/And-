@@ -1,0 +1,20 @@
+.qodo
+
+# .gitignore content
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+
+# Data files
+data/chat_history.txt
+embeddings/
+
+# IDE
+.vscode/
+
+# Hugging Face cache
+.huggingface/

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My AI Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #chat-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .user-msg {
+            color: blue;
+            margin-bottom: 10px;
+        }
+        .ai-msg {
+            color: green;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: red;
+        }
+        #user-input {
+            width: 80%;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>My AI Chat</h1>
+    <div id="chat-container"></div>
+    <input type="text" id="user-input" placeholder="Type your message">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatContainer = document.getElementById('chat-container');
+            const userMessage = input.value.trim();
+            
+            if (!userMessage) return; // Don't send empty messages
+            
+            // Display user message
+            chatContainer.innerHTML += `<div class="user-msg">You: ${userMessage}</div>`;
+            
+            try {
+                // Clear input field immediately
+                input.value = '';
+                
+                // Send request to backend
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userMessage })
+                });
+                
+                const data = await response.json();
+                
+                // Check if response exists
+                if (data.response) {
+                    chatContainer.innerHTML += `<div class="ai-msg">AI: ${data.response}</div>`;
+                } else if (data.error) {
+                    chatContainer.innerHTML += `<div class="error">Error: ${data.error}</div>`;
+                } else {
+                    chatContainer.innerHTML += `<div class="error">Error: No response received</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                chatContainer.innerHTML += `<div class="error">Error: ${error.message}</div>`;
+            }
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Allow Enter key to send messages
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
