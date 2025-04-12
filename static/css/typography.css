@@ -1,0 +1,125 @@
+/* typography.css - Modern Typography System */
+html {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  body {
+    font-family: var(--font-body);
+    color: var(--color-gray-900);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
+  }
+  
+  h1 {
+    font-size: var(--font-size-4xl);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.025em;
+  }
+  
+  h2 {
+    font-size: var(--font-size-3xl);
+    color: var(--color-secondary);
+    letter-spacing: -0.015em;
+  }
+  
+  h3 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-tertiary);
+  }
+  
+  p {
+    margin-bottom: var(--space-4);
+    font-size: var(--font-size-base);
+  }
+  
+  .lead-text {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-6);
+    max-width: 65ch;
+    line-height: 1.6;
+  }
+  
+  .small-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-500);
+  }
+  
+  blockquote {
+    border-left: 4px solid var(--color-primary);
+    padding-left: var(--space-4);
+    margin-left: 0;
+    font-style: italic;
+    color: var(--color-gray-600);
+  }
+  
+  code {
+    font-family: monospace;
+    background-color: var(--color-gray-100);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+  }
+  
+  mark {
+    background-color: rgba(67, 97, 238, 0.15);
+    padding: 0 var(--space-1);
+  }
+  
+  .gradient-text {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  /* Dynamic text underline animation */
+  .animated-underline {
+    position: relative;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+  
+  .animated-underline::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform var(--transition-medium);
+  }
+  
+  .animated-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  
+  /* Responsive typography */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: var(--font-size-3xl);
+    }
+    
+    h2 {
+      font-size: var(--font-size-2xl);
+    }
+    
+    h3 {
+      font-size: var(--font-size-xl);
+    }
+  }
+  

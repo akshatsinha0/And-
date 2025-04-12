@@ -1,43 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My AI Chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AI Chat - And?</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/typography.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        #chat-container {
-            height: 400px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .user-msg {
-            color: blue;
-            margin-bottom: 10px;
-        }
-        .ai-msg {
-            color: green;
-            margin-bottom: 10px;
-        }
-        .error {
-            color: red;
+        #user-input::placeholder {
+            text-align: right;
+            color: #6D7083;       
+            opacity: 0.7;        
+            transition: opacity 0.3s;
         }
         #user-input {
-            width: 80%;
-            padding: 8px;
+            text-align: left;
+        }
+        #user-input:focus::placeholder {
+            opacity: 0.4;         
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+  
+        .input-with-icon input {
+            padding-left: 40px; /* Make room for the icon */
+        }
+  
+        .input-with-icon .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-tertiary);
+            pointer-events: none;
+        }
+        #user-input::placeholder {
+            text-align: right;
+        }
+        /* Firefox 19+ */
+        #user-input::-moz-placeholder {
+            text-align: right;
+        }
+        /* IE 10+ */
+        #user-input:-ms-input-placeholder {
+            text-align: right;
+        }
+        /* Edge */
+        #user-input::-ms-input-placeholder {
+            text-align: right;
         }
     </style>
 </head>
-<body>
-    <h1>My AI Chat</h1>
-    <div id="chat-container"></div>
-    <input type="text" id="user-input" placeholder="Type your message">
-    <button onclick="sendMessage()">Send</button>
+<body class="parallax-container">
+    <div class="chat-container stagger-fade-in">
+        <!-- Ambient Background -->
+        <div class="ambient-background parallax-element" data-speed="0.2"></div>
+        
+        <!-- Chat Header -->
+        <header class="chat-header card-neon-blue">
+            <div class="chat-logo">
+                <i class="fas fa-robot chat-logo-icon neon-text shine"></i>
+                <h1 class="chat-logo-text gradient-text raleway-700">My AI Chat - And?</h1>
+            </div>
+            <div class="chat-actions">
+                <button class="btn btn-neumorph btn-icon">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chat-container">
+            <!-- Empty State -->
+            <div class="chat-empty-state text-center my-8">
+                <i class="fas fa-comment-dots chat-empty-icon mb-4"></i>
+                <h2 class="chat-empty-title gradient-text raleway-600">Start Chatting</h2>
+                <p class="lead-text mt-4">Type your message below to begin</p>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container card-glass">
+            <div class="input-group input-with-icon">
+                <i class="fas fa-comment-alt icon"></i>
+                <input type="text" 
+                       class="chat-input" 
+                       id="user-input" 
+                       placeholder="Type your message..."
+                       aria-label="Type your message">
+                <button type="button" class="btn btn-accent chat-submit-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div class="typing-indicator loading-dots" style="display: none;">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+        </div>
+    </div>
 
     <script>
         async function sendMessage() {
@@ -45,16 +122,22 @@
             const chatContainer = document.getElementById('chat-container');
             const userMessage = input.value.trim();
             
-            if (!userMessage) return; // Don't send empty messages
+            if (!userMessage) return;
             
-            // Display user message
-            chatContainer.innerHTML += `<div class="user-msg">You: ${userMessage}</div>`;
+            // Add user message
+            chatContainer.innerHTML += `
+                <div class="message message-user slideIn">
+                    ${userMessage}
+                    <div class="message-time small-text">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
             
             try {
-                // Clear input field immediately
                 input.value = '';
                 
-                // Send request to backend
+                // Show loading state
+                document.querySelector('.typing-indicator').style.display = 'flex';
+                
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -63,26 +146,37 @@
                 
                 const data = await response.json();
                 
-                // Check if response exists
                 if (data.response) {
-                    chatContainer.innerHTML += `<div class="ai-msg">AI: ${data.response}</div>`;
-                } else if (data.error) {
-                    chatContainer.innerHTML += `<div class="error">Error: ${data.error}</div>`;
+                    chatContainer.innerHTML += `
+                        <div class="message message-ai pulse">
+                            ${data.response}
+                            <div class="message-time small-text">${new Date().toLocaleTimeString()}</div>
+                        </div>
+                    `;
                 } else {
-                    chatContainer.innerHTML += `<div class="error">Error: No response received</div>`;
+                    chatContainer.innerHTML += `
+                        <div class="message message-error">
+                            ${data.error || 'No response received'}
+                        </div>
+                    `;
                 }
             } catch (error) {
-                console.error('Error:', error);
-                chatContainer.innerHTML += `<div class="error">Error: ${error.message}</div>`;
+                chatContainer.innerHTML += `
+                    <div class="message message-error">
+                        Error: ${error.message}
+                    </div>
+                `;
+            } finally {
+                // Hide loading state
+                document.querySelector('.typing-indicator').style.display = 'none';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             }
-            
-            // Scroll to bottom
-            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
-        
-        // Allow Enter key to send messages
-        document.getElementById('user-input').addEventListener('keypress', function(e) {
+
+        // Enter key handler
+        document.getElementById('user-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                e.preventDefault();
                 sendMessage();
             }
         });
