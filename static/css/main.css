@@ -1,6 +1,4 @@
-/* main.css - Core Layout & Components */
 
-/* Reset & Base Styles */
 @import 'variables.css';  
 @import 'typography.css';
 @import 'animations.css';
@@ -30,7 +28,7 @@
     animation: gradientFlow 15s ease infinite;
   }
   
-  /* Layout Containers */
+  
   .container {
     width: 100%;
     max-width: 1200px;
@@ -44,7 +42,7 @@
     gap: var(--space-4);
   }
   
-  /* Modern Chat Interface */
+  
   .chat-container {
     display: flex;
     flex-direction: column;
@@ -132,7 +130,7 @@
     box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
   }
   
-  /* Modern Buttons */
+  
   .btn {
     display: inline-flex;
     align-items: center;
@@ -191,7 +189,7 @@
     box-shadow: inset var(--neumorph-shadow-light), inset var(--neumorph-shadow-dark);
   }
   
-  /* Cards */
+  
   .card {
     padding: var(--space-6);
     border-radius: var(--border-radius-lg);
@@ -217,7 +215,7 @@
     box-shadow: var(--neumorph-shadow-light), var(--neumorph-shadow-dark);
   }
   
-  /* Image styling */
+  
   .img-fluid {
     max-width: 100%;
     height: auto;
@@ -228,7 +226,7 @@
     border-radius: 50%;
   }
   
-  /* Utilities */
+  
   .text-center { text-align: center; }
   .my-1 { margin-top: var(--space-1); margin-bottom: var(--space-1); }
   .my-2 { margin-top: var(--space-2); margin-bottom: var(--space-2); }
@@ -237,7 +235,7 @@
   .mt-4 { margin-top: var(--space-4); }
   .mb-4 { margin-bottom: var(--space-4); }
   
-  /* Responsive design */
+  
   @media (max-width: 768px) {
     .grid {
       grid-template-columns: repeat(6, 1fr);
