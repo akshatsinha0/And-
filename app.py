@@ -46,8 +46,8 @@ def initialize_rag():
 
         loader = TextLoader(
             file_path=file_path,
-            encoding=encoding,
-            autodetect_encoding=True
+            encoding="utf-8",
+            autodetect_encoding=False
         )
         documents = loader.load()
         print(f"Loaded {len(documents)} initial documents")
